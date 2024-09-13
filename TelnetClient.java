@@ -303,16 +303,20 @@ public class TelnetClient {
         if (entries.isEmpty()) {
             System.out.println("The cache is empty");
         } else {
-            System.out.println("Press ESC to exit...");
+            System.out.println("Press ESC to cancel");
             System.out.printf("%-7s%-30s%-20s%-7s%-25s\n", "Index", "Domain Name", "IP Address", "Port", "Time");
             System.out.printf("-----------------------------------------------------------------------------------\n");
             int index = 1;
             int displayedEntries = 0;
             for (int i = (entries.size() - 1); i > -1; i--) {
-                System.out.printf("%-7s%-30s%-20s%-7s%-25s\n", index++, entries.get(i).getDomainName(), entries.get(i).getIpAddress(), entries.get(i).getPort(), entries.get(i).getTime());
+                try {
+                    System.out.printf("%-7s%-30s%-20s%-7s%-25s\n", index++, entries.get(i).getDomainName(), entries.get(i).getIpAddress(), entries.get(i).getPort(), entries.get(i).getTime());
+                }
+                catch(Exception e) {}
+                
                 ++displayedEntries;
                 if (displayedEntries % 5 == 0) {
-                    System.out.println("[" + (displayedEntries * 100 / entries.size()) + "% shown]");
+                    System.out.println("[" + (displayedEntries * 100 / entries.size()) + "% shown]; press SPACE then ENTER to continue");
                     char choice = System.console().readLine().charAt(0);
                     if (choice == 0x1B) // Escape key
                         break;
