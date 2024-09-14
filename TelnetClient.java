@@ -15,7 +15,7 @@ import java.util.*;
 public class TelnetClient {
 
 	public static void main(String[] args) {
-		System.out.println("Welcome to telnet\n Use command open to connect to a telnet server");
+		System.out.println("Welcome to telnet\n Use command 'open' to connect to a telnet server\n Use command '?' for help");
         Scanner in = new Scanner(System.in);
         String s;
 		while(true) {	
@@ -36,6 +36,9 @@ public class TelnetClient {
 				continue;
 			} else if(tokens[0].equals("clear")) {
                 clearMenu(tokens);
+                continue;
+            } else if(tokens[0].equals("?")) {
+                helpMenu();
                 continue;
             } { // Default case
 				System.out.println("Incorrect command");
@@ -149,6 +152,10 @@ public class TelnetClient {
     // PARSING METHODS
     
     public static void mainMenu(String[] command) {
+        if(command.length == 1) {
+            System.out.println("Incomplete or incorrect 'open' command");
+            return;
+        }
     	int port = 0;
 		String host = command[1];
         if (command.length == 3 && Integer.parseInt(command[2]) > 0 && Integer.parseInt(command[2]) < 65537) {
@@ -200,6 +207,30 @@ public class TelnetClient {
         } else {
             System.out.println("Incomplete or incorrect 'clear' command");
         }
+    }
+
+    public static void helpMenu() {
+        System.out.println("\nTelnet Client Help Menu\n");
+        System.out.println("OPEN Command:");
+        System.out.println("  open <ipv4_address|URL_address> [port_number]");
+        System.out.println("    - Establishes a connection to the specified Telnet server.");
+        System.out.println("    - The port number is optional. If not provided, the default port (23) is used.");
+        System.out.println("\nCACHE Commands:");
+        System.out.println("  cache list");
+        System.out.println("    - Displays a list of saved connections.");
+        System.out.println("    - Each entry includes the domain name (if available), IP address, port, and time of entry.");
+        System.out.println("  cache open <number_of_entry>");
+        System.out.println("    - Opens a connection to a Telnet server from a specified entry in the cache list.");
+        System.out.println("  cache insert <ipv4_address|URL_address> [port_number]");
+        System.out.println("    - Adds an entry to the list. You can specify either a domain name or IP address, with an optional port number.");
+        System.out.println("\nCLEAR Command:");
+        System.out.println("  clear cache [number_of_entry]");
+        System.out.println("    - Clears all cached entries if no entry number is specified.");
+        System.out.println("    - If a number of entry is provided, it removes that specific entry.");
+        System.out.println("\nAdditional Commands:");
+        System.out.println("  ? - Displays this help menu.");
+        System.out.println("  close or exit - Closes the current connection to the Telnet server.");
+        System.out.println("  back - Sends Ctrl-C to the server to attempt an interruption of a command.");
     }
 
     // HELPER METHODS
@@ -317,11 +348,15 @@ public class TelnetClient {
                 ++displayedEntries;
                 if (displayedEntries % 5 == 0) {
                     System.out.println("[" + (displayedEntries * 100 / entries.size()) + "% shown]; press SPACE then ENTER to continue");
-                    char choice = System.console().readLine().charAt(0);
-                    if (choice == 0x1B) // Escape key
-                        break;
+                    try {
+                        char choice = System.console().readLine().charAt(0);
+                        if (choice == 0x1B) // Escape key
+                            break;
+                    }
+                    catch(Exception e) {}   
                 }
             }
+            System.out.println("All entries shown");
         }
     }
     
