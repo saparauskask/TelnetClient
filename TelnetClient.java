@@ -67,7 +67,6 @@ public class TelnetClient {
                 String[] domainParts = socket.getInetAddress().toString().split("/");
                 addNewEntry(host, domainParts[1], newPort);
             } else {
-                //addNewEntry(null, socket.getInetAddress().toString(), newPort);
                 addNewEntry(null, host, newPort);
             }
 
@@ -78,10 +77,6 @@ public class TelnetClient {
             // Create a thread to read data from the server
               Thread readerThread = new Thread(() -> {
                   try {
-                    //    String line;
-                    //    while ((line = reader.readLine()) != null) {
-                    //         System.out.println(line);
-                    //    }
                     String string = reader.readLine();
                     int character;
                     while ((character = reader.read()) != -1) {
@@ -128,7 +123,6 @@ public class TelnetClient {
             System.out.println("Unable to connect");
             System.exit(0);
         } catch (IOException e) {
-            //e.printStackTrace();
         } finally{
             System.out.println("The connection to " + host + " was closed");
             System.exit(0);
@@ -260,7 +254,6 @@ public class TelnetClient {
                 file.createNewFile();
                 System.out.println("File '" + fileName + "' created in folder '" + folderName + "'.");
             } else {
-                //System.out.println("File '" + fileName + "' already exists in folder '" + folderName + "'.");
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -271,7 +264,6 @@ public class TelnetClient {
     }
     
     public static boolean addNewEntry(String domainName, String ipAddress, String port) {
-        //System.out.println("addNewEntry method");
         if (ipAddress == null) {
             ipAddress = "-";
         }
@@ -297,26 +289,10 @@ public class TelnetClient {
                     return false;
                 }
             }
-            // dotCount = 0;
-            // for (int i = 0; i < ipAddress.length(); ++i) {
-            //     if (ipAddress.charAt(i) == '.') {
-            //         dotCount++;
-            //     }
-            // }
-            // if (dotCount != 3) {
-            //     System.out.println("error: Incorrect data format");
-            //     return false;
-            // }
-
-            // if (port != "-" && (Integer.parseInt(port) < 1 || Integer.parseInt(port) > 65535)) {
-            //     System.out.println("Incorrect port number. New entry could not be added");
-            //     return false;
-            // }
     	
             DataEntry entry = new DataEntry(domainName, ipAddress, port, time);
             String csvString = entry.toCsvString();
             DataEntry.appendToCsvFile(path, csvString);
-            //System.out.println("Data was appended to csv file successfully");
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("error: new entry could not be appended");
